@@ -46,6 +46,7 @@ function getCurrentTabUrl() {
     active: true,
     currentWindow: true
   };
+}
 
 function renderStatus(statusText) {
 	document.getElementById('status').innerHTML = statusText;
