@@ -9,6 +9,14 @@
 		"default_icon" : "icon.png",
 		"default_popup" : "main.html"
 	},
+
+	"content_scripts": [
+		{
+			"matches": ["https://*/*"],
+			"js": ["page.js"]
+		}
+	],
+
 	"permissions" : [
 		"activeTab",
 		"https://ajax.googleapis.com/"
