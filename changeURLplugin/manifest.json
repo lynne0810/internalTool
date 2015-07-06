@@ -12,8 +12,9 @@
 
 	"content_scripts": [
 		{
-			"matches": ["https://*/*"],
-			"js": ["page.js"]
+			"matches": ["*://*/*"],
+			"js": ["page.js"],
+			"include_globs": ["*us*"]
 		}
 	],
 
