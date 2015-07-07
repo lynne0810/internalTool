@@ -14,12 +14,11 @@
 		{
 			"matches": ["*://*/*"],
 			"js": ["page.js"],
-			"include_globs": ["*us*"]
+			"include_globs": ["*us*", "*search*"]
 		}
 	],
 
 	"permissions" : [
-		"activeTab",
-		"https://ajax.googleapis.com/"
+		"activeTab"
 	]
 }

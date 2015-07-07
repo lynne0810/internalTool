@@ -33,9 +33,16 @@ function parseString(location, callback){
 
 	callback(window, nameObj);
 }
-
+/*
+function getSearchObjects(){
+	var searchContext = window.location.search.substring(1, window.location.search.length);
+	console.log(searchContext);
+	var paraArray = searchContext.split("&");
+}
+*/
 function changeURL(myWindow, dataObj){
 	console.log(dataObj);
+	//getSearchObjects();
 	if(dataObj["host"] !== undefined){
 		myWindow.location.host = dataObj["host"];
 	}
