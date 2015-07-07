@@ -1,3 +1,20 @@
+/**
+* Define classes and globle variables
+*/
+function Parameter(shortName, realName, key){
+	this.shortName = shortName;
+	this.realName = realName;
+	this.key = key;
+}
+/*
+var namePairs = {
+	"host" : "host",
+	"path" : "pathname",
+	"dev" : ".origin",
+	"vkey" : "__gsm_lpm_params=vkey",
+	"gsm" : "__gsm_lpm_host"
+}
+*/
 var json = {
 	'protocal' : "http:",
 	'dev1' : 'disgustmust.corp.gq1.yahoo.com',
@@ -5,8 +22,14 @@ var json = {
 	'host1' : 'us.dev-current.web.search.yahoo.com',
 	'host2' : 'us.dd.web.search.yahoo.com',
 	'path1' : "search",
-	'path2' : "search/ads"  
+	'path2' : "search/ads",
+	'gsmhost1' : "us.devqa.gsmwsc.search.yahoo.com",
+	'gsmhost2' : "us.data.gsmwsc.search.yahoo.com"
 };
+
+var paraName = ["host", "path", "dev", "vkey", "gsmhost"];
+var realParaName = ["host", "pathname", ".origin", "__gsm_lpm_params=vkey", "__gsm_lpm_host"];
+/*------------------End of defination----------------------------*/
 
 /**
  * parse the string to an object
@@ -31,28 +54,54 @@ function parseString(location, callback){
 		}
 	}
 
-	callback(window, nameObj);
+	callback(nameObj);
 }
-/*
+
+/**
+ * the format of the return value for this function
+ * 
+ */
 function getSearchObjects(){
 	var searchContext = window.location.search.substring(1, window.location.search.length);
-	console.log(searchContext);
-	var paraArray = searchContext.split("&");
+	var paraString = searchContext.split("&");
+	var paraArray = [];
+	for(var i = 0; i < paraString.length; i++){
+		var temp = paraString[i].split("=",2);
+		paraArray[temp[0]] = temp[1];
+	}
+	return paraArray;
 }
-*/
-function changeURL(myWindow, dataObj){
-	console.log(dataObj);
-	//getSearchObjects();
-	if(dataObj["host"] !== undefined){
-		myWindow.location.host = dataObj["host"];
+
+function getFinalSearchString(paraArray){
+	var finalString = "?";
+	for(var key in paraArray){
+		finalString += (key + "=" + paraArray[key] + "&");
 	}
-	if(dataObj["path"] !== undefined){
-		myWindow.location.pathname = dataObj["path"];
+	finalString = finalString.substring(0, finalString.length - 1);
+	console.log(finalString);
+	window.location.search = finalString;
+}
+
+function changeURL(dataObj){
+	var paraArray = getSearchObjects();
+	for(var i = 0; i < paraName.length; i++){
+		if(dataObj[paraName[i]] === undefined) 
+			continue;
+		if((paraName[i] === "host" || paraName[i] === "path")){
+			var locationVar = realParaName[i];
+			console.log(dataObj[paraName[i]]);
+			window.location[locationVar] = dataObj[paraName[i]];
+		}else{
+			//if it is in the current url
+			paraArray[realParaName[i]] = dataObj[paraName[i]];
+		}
 	}
+	getFinalSearchString(paraArray);
 }
 
 function modifyURL(text){
 	parseString(text, changeURL);
+	console.log(window.location);
 }
 
 chrome.runtime.onMessage.addListener(
